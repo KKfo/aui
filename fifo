@@ -27,7 +27,7 @@ fi
 #ARCHLINUX INSTALL SCRIPTS MODE {{{
 #SELECT KEYMAP {{{
 select_keymap(){
-    $KEYMAP = "fr"
+  $KEYMAP="fr"
   loadkeys $KEYMAP
 }
 #}}}
