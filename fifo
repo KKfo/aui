@@ -33,7 +33,7 @@ select_keymap(){
 #}}}
 #DEFAULT EDITOR {{{
 select_editor(){
-  EDITOR="vim"
+  EDITOR="vim-minimal"
   package_install "$EDITOR"
 }
 #}}}
