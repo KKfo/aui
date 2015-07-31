@@ -195,7 +195,7 @@ setup_luks(){
   cryptsetup open --type luks /dev/sda2 cryptboot
  
   LUKS=1
-  # LUKS_DISK=`echo ${OPT} | sed 's/\/dev\///'`
+  LUKS_DISK=`echo ${OPT} | sed 's/\/dev\///'`
 }
 
 #}}}
@@ -337,6 +337,7 @@ format_partitions(){
   }
 
   set_efi_partition(){
+    mount /dev/sda2 ${MOUNTPOINT}/boot
     efi_options=("/boot/efi" "/boot")
     PS3="$prompt1"
     echo -e "Select EFI mountpoint:\n"
