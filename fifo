@@ -227,7 +227,7 @@ format_partitions(){
   format_partition " ${root_partition}" "${MOUNTPOINT}"  "${root_fs}"
   #}}
   #SETUP BOOT {{{
-  format_partition "${boot_partition}" "${MOUNTPOINT}}/boot" "${boot_fs}"
+  format_partition "${boot_partition}" "${MOUNTPOINT}/boot" "${boot_fs}"
   #}}  
   #SETUP EFI {{{
   format_partition "${efi_partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}" vfat

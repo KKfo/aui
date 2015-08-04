@@ -69,7 +69,7 @@
   UEFI=0
   LVM=0
   LUKS=0
-  LUKS_DISK="sda3"
+  LUKS_DISK="sda2"
   AUR=`echo -e "(${BPurple}aur${Reset})"`
   EXTERNAL=`echo -e "(${BYellow}external${Reset})"`
   AUI_DIR=`pwd` #CURRENT DIRECTORY
