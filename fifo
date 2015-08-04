@@ -186,6 +186,7 @@ setup_lvm(){
   lvcreate -l 100%FREE lvm -n home #lvcreate -l 100%FREE lvm -n home
   LVM=1
 }
+EFI_MOUNTPOINT='/boot/efi'
 #}}}
 #SELECT|FORMAT PARTITIONS {{{
 format_partitions(){
@@ -202,8 +203,7 @@ format_partitions(){
   home_partition='/dev/mapper/lvm-home'
   home_fs='ext4'
   swap_partition='/dev/mapper/lvm-swap'
-  EFI_MOUNTPOINT='/boot/efi'
-  
+ 
   format_partition(){
       filesystem=$3
       read_input_text "Confirm format $1 partition to $3"
