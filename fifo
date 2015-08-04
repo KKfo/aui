@@ -134,39 +134,14 @@ select_device(){
 #}}}
 #CREATE PARTITION SCHEME {{{
 create_partition_scheme(){
-  LUKS=0
-  LVM=0
+  LUKS=1
+  LVM=1
   print_title "https://wiki.archlinux.org/index.php/Partitioning"
   print_info "Partitioning a hard drive allows one to logically divide the available space into sections that can be accessed independently of one another."
   print_warning "Maintain Current does not work with LUKS"
-  partition_layout=("Default" "LVM" "LVM+LUKS" "Maintain Current")
-  PS3="$prompt1"
-  echo -e "Select partition scheme:"
-  select OPT in "${partition_layout[@]}"; do
-    case "$REPLY" in
-      1)
-        create_partition
-        ;;
-      2)
-        create_partition
-        setup_lvm
-        ;;
-      3)
-        create_partition
-        setup_luks
-        setup_lvm
-        ;;
-      4)
-        modprobe dm-mod
-        vgscan &> /dev/null
-        vgchange -ay &> /dev/null
-        ;;
-      *)
-        invalid_option
-        ;;
-    esac
-    [[ -n $OPT ]] && break
-  done
+  create_partition
+  setup_luks
+  setup_lvm
 }
 #}}}
 #SETUP PARTITION{{{
@@ -247,26 +222,26 @@ format_partitions(){
       mkswap  $1
       swapon  $1
   }
-  ## ROOT ##
+  #SETUP ROOT {{{
   ROOT_PART=`echo ${root_partition} | sed 's/\/dev\/mapper\///' | sed 's/\/dev\///'`
   ROOT_MOUNTPOINT=${root_partition}
   format_partition " ${root_partition}" "${MOUNTPOINT}"  "${root_fs}"
-  
-  ## BOOT ##
+  #}}
+  #SETUP BOOT {{{
   format_partition "${boot_partition}" "${MOUNTPOINT}}/boot" "${boot_fs}"
-  
-  ## EFI ###
+  #}}  
+  #SETUP EFI {{{
   format_partition "${efi_partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}" vfat
-  
-  ## SWAP ##
+  #}}
+  #SETUP SWAP {{{
   create_swap "${swap_partition}"
-  
-  ## VAR ##
+  #}}
+  #SETUP VAR {{{
   format_partition "${var_partition}" "${MOUNTPOINT}/var" "${var_fs}"
-  
-  ## HOME ##
+  #}}
+  #SETUP HOME {{{
   format_partition "${home_partition}" "${MOUNTPOINT}/home" "${home_fs}"
-  
+  #}}
   pause_function
 }
 #}}}
@@ -294,8 +269,7 @@ install_base_system(){
 #}}}
 #CONFIGURE KEYMAP {{{
 configure_keymap(){
-  #ADD KEYMAP TO THE NEW SETUP
-  echo "KEYMAP=$KEYMAP" > ${MOUNTPOINT}/etc/vconsole.conf
+    echo "KEYMAP=fr" > ${MOUNTPOINT}/etc/vconsole.conf
 }
 #}}}
 #CONFIGURE FSTAB {{{
