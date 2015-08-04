@@ -364,7 +364,7 @@ format_partitions(){
               ROOT_PART=`echo ${partition} | sed 's/\/dev\/mapper\///' | sed 's/\/dev\///'`
               ROOT_MOUNTPOINT=${partition}
               format_partition "${partition}" "${MOUNTPOINT}"
-	      print "\n**************************************Setting up encrypted boot partition ${partition} ${MOUNTPOINT}"
+	      printf "\n**************************************Setting up encrypted boot partition ${partition} ${MOUNTPOINT}"
 	      mkdir "${MOUNTPOINT}$/boot"
 	      mkfs.ext2 "/dev/mapper/cryptboot"
 	      mount /dev/mapper/cryptboot "${MOUNTPOINT}$/boot"	
