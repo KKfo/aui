@@ -367,7 +367,7 @@ format_partitions(){
 	      printf "\n**************************************Setting up encrypted boot partition ${partition} ${MOUNTPOINT}"
 	      mkdir "${MOUNTPOINT}/boot"
 	      mkfs.ext2 "/dev/mapper/cryptboot"
-	      mount /dev/mapper/cryptboot "${MOUNTPOINT}$/boot"	
+	      mount /dev/mapper/cryptboot "${MOUNTPOINT}/boot"	
               ;;
             EFI)
 		set_efi_partition
