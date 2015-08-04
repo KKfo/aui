@@ -187,11 +187,11 @@ setup_luks(){
     OPT="/dev/sda3"
   print_title "LUKS - https://wiki.archlinux.org/index.php/LUKS"
   print_info "The Linux Unified Key Setup or LUKS is a disk-encryption specification created by Clemens Fruhwirth and originally intended for Linux."
-  echo "Create encrypted main partition"
+  echo "\nCreate encrypted main partition\n"
   cryptsetup --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat $OPT
   cryptsetup open --type luks $OPT crypt
-  echo "Create encrypted boot"
-   cryptsetup --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat /dev/sda2
+  echo "\nCreate encrypted boot partition\n"
+  cryptsetup --cipher aes-xts-plain64 --key-size 512 --hash sha512 --iter-time 5000 --use-random --verify-passphrase luksFormat /dev/sda2
   cryptsetup open --type luks /dev/sda2 cryptboot
  
   LUKS=1
@@ -367,16 +367,19 @@ format_partitions(){
               format_partition "${partition}" "${MOUNTPOINT}"
               ;;
             EFI)
-              set_efi_partition
-              read_input_text "Format ${partition} partition"
-              if [[ $OPTION == y ]]; then
-                format_partition "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}" vfat
-              else
-                mkdir -p "${MOUNTPOINT}${EFI_MOUNTPOINT}"
-                mount -t vfat "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}"
-                check_mountpoint "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}"
-              fi
-              ;;
+		mkdir ${MOUNTPOINT}$/boot
+		mkfs.ext2 /dev/mapper/cryptboot
+		mount /dev/mapper/cryptboot ${MOUNTPOINT}$/boot
+		set_efi_partition
+		read_input_text "Format ${partition} partition"
+		if [[ $OPTION == y ]]; then
+                    format_partition "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}" vfat
+		else
+                    mkdir -p "${MOUNTPOINT}${EFI_MOUNTPOINT}"
+                    mount -t vfat "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}"
+                    check_mountpoint "${partition}" "${MOUNTPOINT}${EFI_MOUNTPOINT}"
+		fi
+		;;
             another)
               read -p "Mountpoint [ex: /home]:" directory
               [[ $directory == "/boot" ]] && BOOT_MOUNTPOINT=`echo ${partition} | sed 's/[0-9]//'`
