@@ -195,6 +195,7 @@ format_partitions(){
 
   boot_partition='/dev/mapper/cryptboot'
   boot_fs='ext2'
+  efi_partition='/dev/sda1'
   root_partition='/dev/mapper/lvm-root'
   root_fs='ext4'
   var_partition='/dev/mapper/lvm-var'
