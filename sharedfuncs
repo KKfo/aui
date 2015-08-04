@@ -253,9 +253,9 @@
     if [[ -n $(dmidecode --type 1 | grep VirtualBox) ]]; then
       cecho Virtualbox
       VIDEO_DRIVER="virtualbox"
-    elif [[ $_vga_length -eq 2 ]] && [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
-      cecho Bumblebee
-      VIDEO_DRIVER="bumblebee"
+    elif [[ -n $(echo ${_vga} | grep "intel corporation") || -f /sys/kernel/debug/dri/0/i915_capabilities ]]; then
+	cecho Intel
+	VIDEO_DRIVER="intel"
     elif [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
       cecho Nvidia
       read_input_text "Install NVIDIA proprietary driver" $PROPRIETARY_DRIVER
@@ -265,14 +265,14 @@
         VIDEO_DRIVER="nouveau"
       fi
     elif [[ -n $(echo ${_vga} | grep "advanced micro devices") || -f /sys/kernel/debug/dri/0/radeon_pm_info || -f /sys/kernel/debug/dri/0/radeon_sa_info ]]; then
-      cecho AMD/ATI
-      VIDEO_DRIVER="ati"
-    elif [[ -n $(echo ${_vga} | grep "intel corporation") || -f /sys/kernel/debug/dri/0/i915_capabilities ]]; then
-      cecho Intel
-      VIDEO_DRIVER="intel"
+	cecho AMD/ATI
+	VIDEO_DRIVER="ati"
+    elif [[ $_vga_length -eq 2 ]] && [[ -n $(echo ${_vga} | grep "nvidia") || -f /sys/kernel/debug/dri/0/vbios.rom ]]; then
+	cecho Bumblebee
+	VIDEO_DRIVER="bumblebee"
     else
-      cecho VESA
-      VIDEO_DRIVER="vesa"
+	cecho VESA
+	VIDEO_DRIVER="vesa"
     fi
     OPTION="y"
     [[ $VIDEO_DRIVER == intel || $VIDEO_DRIVER == vesa ]] && read -p "Confirm video driver: $VIDEO_DRIVER [Y/n]" OPTION
