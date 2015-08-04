@@ -205,10 +205,10 @@ setup_lvm(){
   print_info "LVM is a logical volume manager for the Linux kernel; it manages disk drives and similar mass-storage devices. "
   pvcreate /dev/mapper/crypt
   vgcreate lvm /dev/mapper/crypt
-  lvcreate -L 4G lvm -n swap
-  lvcreate -L 30G lvm -n root
-  lvcreate -L 12G lvm -n var
-  lvcreate -l 100%FREE lvm -n home
+  lvcreate -L 1G lvm -n swap #lvcreate -L 4G lvm -n swap
+  lvcreate -L 6G lvm -n root #lvcreate -L 30G lvm -n root
+  lvcreate -L 1G lvm -n var  #lvcreate -L 12G lvm -n var
+  lvcreate -l 100%FREE lvm -n home #lvcreate -l 100%FREE lvm -n home
   LVM=1
 }
 #}}}
@@ -337,7 +337,6 @@ format_partitions(){
   }
 
   set_efi_partition(){
-    mount /dev/sda2 ${MOUNTPOINT}/boot
     efi_options=("/boot/efi" "/boot")
     PS3="$prompt1"
     echo -e "Select EFI mountpoint:\n"
@@ -365,11 +364,12 @@ format_partitions(){
               ROOT_PART=`echo ${partition} | sed 's/\/dev\/mapper\///' | sed 's/\/dev\///'`
               ROOT_MOUNTPOINT=${partition}
               format_partition "${partition}" "${MOUNTPOINT}"
+	      print "\n**************************************Setting up encrypted boot partition ${partition} ${MOUNTPOINT}"
+	      mkdir "${MOUNTPOINT}$/boot"
+	      mkfs.ext2 "/dev/mapper/cryptboot"
+	      mount /dev/mapper/cryptboot "${MOUNTPOINT}$/boot"	
               ;;
             EFI)
-		mkdir ${MOUNTPOINT}$/boot
-		mkfs.ext2 /dev/mapper/cryptboot
-		mount /dev/mapper/cryptboot ${MOUNTPOINT}$/boot
 		set_efi_partition
 		read_input_text "Format ${partition} partition"
 		if [[ $OPTION == y ]]; then
