@@ -61,7 +61,7 @@
   #}}}
   # MOUNTPOINTS {{{
     EFI_MOUNTPOINT="/boot/efi"
-    ROOT_MOUNTPOINT="/dev/sda1"
+    ROOT_MOUNTPOINT="/dev/mapper/lvm-root"
     BOOT_MOUNTPOINT="/dev/sda"
     MOUNTPOINT="/mnt"
   #}}}
@@ -69,7 +69,7 @@
   UEFI=0
   LVM=0
   LUKS=0
-  LUKS_DISK="sda2"
+  LUKS_DISK="sda3"
   AUR=`echo -e "(${BPurple}aur${Reset})"`
   EXTERNAL=`echo -e "(${BYellow}external${Reset})"`
   AUI_DIR=`pwd` #CURRENT DIRECTORY
