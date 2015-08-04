@@ -483,7 +483,7 @@ configure_fstab(){
 configure_hostname(){
   print_title "HOSTNAME - https://wiki.archlinux.org/index.php/HOSTNAME"
   print_info "A host name is a unique name created to identify a machine on a network.Host names are restricted to alphanumeric characters.\nThe hyphen (-) can be used, but a host name cannot start or end with it. Length is restricted to 63 characters."
-  read -p "Hostname [ex: archlinux]: " host_name
+  host_name='bdsbx'
   echo "$host_name" > ${MOUNTPOINT}/etc/hostname
   if [[ ! -f ${MOUNTPOINT}/etc/hosts.aui ]]; then
     cp ${MOUNTPOINT}/etc/hosts ${MOUNTPOINT}/etc/hosts.aui
