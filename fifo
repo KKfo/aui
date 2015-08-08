@@ -149,10 +149,10 @@ create_partition(){
     parted ${device} --script mklabel gpt
     parted ${device} --script mkpart primary 2048s 100MiB
     parted ${device} --script mkpart primary 100MiB 600MiB
-    parted ${device} --script mkpart primary 100MiB -- -1
+    parted ${device} --script mkpart primary 600MiB -- -1
     parted ${device} --script name 1 efi
     parted ${device} --script name 2 boot
-    parted ${device} --script name 3 boot lvm-arch
+    parted ${device} --script name 3 lvm-arch
     parted ${device} --script set 1 boot on
     parted ${device} --script set 3 lvm on
 }
@@ -180,10 +180,10 @@ setup_lvm(){
   print_info "LVM is a logical volume manager for the Linux kernel; it manages disk drives and similar mass-storage devices. "
   pvcreate /dev/mapper/crypt
   vgcreate lvm /dev/mapper/crypt
-  lvcreate -L 1G lvm -n swap #lvcreate -L 4G lvm -n swap
-  lvcreate -L 6G lvm -n root #lvcreate -L 30G lvm -n root
-  lvcreate -L 1G lvm -n var  #lvcreate -L 12G lvm -n var
-  lvcreate -l 100%FREE lvm -n home #lvcreate -l 100%FREE lvm -n home
+  lvcreate -L 4G lvm -n swap
+  lvcreate -L 30G lvm -n root
+  lvcreate -L 12G lvm -n var
+  lvcreate -l 100%FREE lvm -n home
   LVM=1
 }
 #}}}
